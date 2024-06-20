@@ -24,7 +24,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   void initState() {
     super.initState();
-    tasks = widget.tasks.map((task) => {'title': task, 'completed': false}).toList();
+    tasks = widget.tasks
+        .map((task) => {'title': task, 'completed': false})
+        .toList();
     listTitle = widget.listTitle;
   }
 
@@ -139,7 +141,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('La lista ha sido eliminada')),
       );
-      Navigator.of(context).pop();
+
+      Navigator.of(context).pushNamed('/taskList');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al eliminar la lista: $e')),
@@ -165,7 +168,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('Eliminar lista'),
-                    content: const Text('¿Estás seguro de que deseas eliminar esta lista?'),
+                    content: const Text(
+                        '¿Estás seguro de que deseas eliminar esta lista?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
@@ -175,6 +179,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         onPressed: () {
                           deleteList();
                           Navigator.of(context).pop();
+                          Navigator.of(context).pushNamed('/taskList');
                         },
                         child: const Text('Eliminar'),
                       ),
@@ -189,7 +194,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('/images/fondo.jpg'), // Asegúrate de que la ruta sea correcta
+            image: AssetImage(
+                '/images/fondo.jpg'), // Asegúrate de que la ruta sea correcta
             fit: BoxFit.cover, // Ajuste de la imagen
           ),
         ),
@@ -198,7 +204,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
           itemBuilder: (context, index) {
             final task = tasks[index];
             return Container(
-              color: const Color.fromARGB(172, 255, 255, 255), // Fondo blanco para cada tarea
+              color: const Color.fromARGB(
+                  172, 255, 255, 255), // Fondo blanco para cada tarea
               child: ListTile(
                 title: Text(task['title']),
                 leading: Checkbox(

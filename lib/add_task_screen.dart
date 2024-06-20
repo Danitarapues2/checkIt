@@ -65,6 +65,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       for (var controller in _taskControllers) {
         controller.clear();
       }
+
+      // Navegar a la ruta /taskList
+      Navigator.of(context).pushNamed('/taskList');
+
     } catch (e) {
       _showErrorDialog('Error al guardar la lista de tareas: $e');
     }

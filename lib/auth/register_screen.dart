@@ -4,7 +4,7 @@ import 'package:check_it/auth/auth_service.dart';
 class RegisterScreen extends StatefulWidget {
   final AuthService authService;
 
-  const RegisterScreen({Key? key, required this.authService}) : super(key: key);
+  const RegisterScreen({super.key, required this.authService});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -16,7 +16,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _password = '';
   String _firstName = '';
   String _lastName = '';
-  String _birthDate = '';
   String? _errorMessage;
   bool _isPasswordHidden = true;
 
@@ -139,35 +138,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                       onSaved: (value) {
                         _lastName = value!;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Fecha de Nacimiento',
-                        filled: true,
-                        fillColor: const Color.fromARGB(235, 233, 233, 233).withOpacity(0.8),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.white),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Ingresa tu fecha de nacimiento';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _birthDate = value!;
                       },
                     ),
                     const SizedBox(height: 16),

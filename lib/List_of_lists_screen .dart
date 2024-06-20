@@ -1,13 +1,16 @@
+import 'package:check_it/task_lists_creen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:check_it/task_lists_creen.dart';
 
 class ListOfListsScreen extends StatelessWidget {
   const ListOfListsScreen({Key? key});
 
   Future<void> deleteList(BuildContext context, String listId) async {
     try {
-      await FirebaseFirestore.instance.collection("listas").doc(listId).delete();
+      await FirebaseFirestore.instance
+          .collection("listas")
+          .doc(listId)
+          .delete();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('La lista ha sido eliminada')),
       );
@@ -27,29 +30,43 @@ class ListOfListsScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('/images/fondo.jpg'), // Ruta de tu imagen de fondo
+            image: AssetImage('images/fondo.jpg'), // Ruta de tu imagen de fondo
             fit: BoxFit.cover, // Ajuste de la imagen
           ),
         ),
         child: FutureBuilder<List<Map<String, dynamic>>>(
           future: getLista(),
-          builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+          builder:
+              (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No hay listas disponibles.'));
+              return Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/addList');
+                  },
+                  child: const Text('Agregar Lista'),
+                ),
+              );
             } else {
               return ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 itemCount: snapshot.data!.length + 1,
                 itemBuilder: (context, index) {
                   if (index == snapshot.data!.length) {
                     // Último elemento es el botón para agregar lista
                     return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-                      color: Color.fromARGB(255, 243, 242, 242),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 10.0),
+                      color: const Color.fromARGB(255, 243, 242, 242),
                       child: InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, '/addList');
@@ -61,7 +78,8 @@ class ListOfListsScreen extends StatelessWidget {
                             children: <Widget>[
                               Icon(Icons.add, size: 40),
                               SizedBox(height: 8),
-                              Text('Agregar Lista', style: TextStyle(fontSize: 16)),
+                              Text('Agregar Lista',
+                                  style: TextStyle(fontSize: 16)),
                             ],
                           ),
                         ),
@@ -70,7 +88,8 @@ class ListOfListsScreen extends StatelessWidget {
                   } else {
                     final lista = snapshot.data![index];
                     return Dismissible(
-                      key: Key(lista['id']), // Usamos el ID como clave para el Dismissible
+                      key: Key(lista[
+                          'id']), // Usamos el ID como clave para el Dismissible
                       direction: DismissDirection.endToStart,
                       background: Container(
                         alignment: Alignment.centerRight,
@@ -87,14 +106,17 @@ class ListOfListsScreen extends StatelessWidget {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: const Text('Eliminar lista'),
-                              content: const Text('¿Estás seguro de que deseas eliminar esta lista?'),
+                              content: const Text(
+                                  '¿Estás seguro de que deseas eliminar esta lista?'),
                               actions: <Widget>[
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(false),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
                                   child: const Text('Cancelar'),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(true),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
                                   child: const Text('Eliminar'),
                                 ),
                               ],
@@ -103,9 +125,10 @@ class ListOfListsScreen extends StatelessWidget {
                         );
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 10.0),
                         child: Card(
-                          color: Color.fromARGB(255, 238, 238, 238),
+                          color: const Color.fromARGB(255, 238, 238, 238),
                           child: ListTile(
                             title: Text(lista['title']),
                             onTap: () {
@@ -138,7 +161,8 @@ class ListOfListsScreen extends StatelessWidget {
 Future<List<Map<String, dynamic>>> getLista() async {
   List<Map<String, dynamic>> listaTareas = [];
   try {
-    CollectionReference collectionReferenceListaTareas = FirebaseFirestore.instance.collection("listas");
+    CollectionReference collectionReferenceListaTareas =
+        FirebaseFirestore.instance.collection("listas");
     QuerySnapshot queryListaTareas = await collectionReferenceListaTareas.get();
 
     for (var documento in queryListaTareas.docs) {
